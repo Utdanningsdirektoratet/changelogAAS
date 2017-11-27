@@ -23,7 +23,7 @@ open HumanReadable
         teamcityUrl = "https://oslaz-pas2-int.udir.no"
         tcUsername = System.Environment.GetEnvironmentVariable("TEAMCITY_USERNAME")
         tcPassword = System.Environment.GetEnvironmentVariable("TEAMCITY_PASSWORD")
-        jiraUrl = "https://jira.udir.no"
+        jiraUrl = "https://jira.udir.no/"
         jiraUsername = System.Environment.GetEnvironmentVariable("JIRA_USERNAME")
         jiraPassword = System.Environment.GetEnvironmentVariable("JIRA_PASSWORD")
         projectMappings = [
@@ -36,25 +36,25 @@ open HumanReadable
         ]
     }
 
-    let versionParameters = {
-        projectName = "UDIR.PAS2"
-        fromVersion = "1.0.4460"
-        toVersion = "1.0.4470"
-        teamcityUrl = "https://oslaz-pas2-int.udir.no"
-        tcUsername = System.Environment.GetEnvironmentVariable("TEAMCITY_USERNAME")
-        tcPassword = System.Environment.GetEnvironmentVariable("TEAMCITY_PASSWORD")
-        jiraUrl = "https://jira.udir.no"
-        jiraUsername = System.Environment.GetEnvironmentVariable("JIRA_USERNAME")
-        jiraPassword = System.Environment.GetEnvironmentVariable("JIRA_PASSWORD")
-        projectMappings = [
-            {
-               githubUrl = "https://github.com/Utdanningsdirektoratet/PAS2-hoved"
-               jiraKey = "PASX"
-               octoDeployName = "UDIR.PAS2"
-               teamcityName = "Pas2_ReleasePas2HovedPsake"
-            }
-        ]
-    }
+    // let versionParameters = {
+    //     projectName = "UDIR.PAS2"
+    //     fromVersion = "1.0.4460"
+    //     toVersion = "1.0.4470"
+    //     teamcityUrl = "https://oslaz-pas2-int.udir.no"
+    //     tcUsername = System.Environment.GetEnvironmentVariable("TEAMCITY_USERNAME")
+    //     tcPassword = System.Environment.GetEnvironmentVariable("TEAMCITY_PASSWORD")
+    //     jiraUrl = "https://jira.udir.no"
+    //     jiraUsername = System.Environment.GetEnvironmentVariable("JIRA_USERNAME")
+    //     jiraPassword = System.Environment.GetEnvironmentVariable("JIRA_PASSWORD")
+    //     projectMappings = [
+    //         {
+    //            githubUrl = "https://github.com/Utdanningsdirektoratet/PAS2-hoved"
+    //            jiraKey = "PASX"
+    //            octoDeployName = "UDIR.PAS2"
+    //            teamcityName = "Pas2_ReleasePas2HovedPsake"
+    //         }
+    //     ]
+    // }
 
     let getEnvironmentChanges() : WebPart =
         fun (ctx : HttpContext) ->
@@ -74,32 +74,32 @@ open HumanReadable
                 return! OK html ctx
             }
 
-    let getVersionChanges() : WebPart =
-        fun (ctx : HttpContext) ->
-            async {
-                let changes = Changelog.getChangesBetweenVersions versionParameters
-                let jsonSerializerSettings = JsonSerializerSettings()
-                jsonSerializerSettings.ContractResolver <- CamelCasePropertyNamesContractResolver()
-                let json = JsonConvert.SerializeObject(changes, jsonSerializerSettings) 
-                return! OK json ctx
-            }
+    // let getVersionChanges() : WebPart =
+    //     fun (ctx : HttpContext) ->
+    //         async {
+    //             let changes = Changelog.getChangesBetweenVersions versionParameters
+    //             let jsonSerializerSettings = JsonSerializerSettings()
+    //             jsonSerializerSettings.ContractResolver <- CamelCasePropertyNamesContractResolver()
+    //             let json = JsonConvert.SerializeObject(changes, jsonSerializerSettings) 
+    //             return! OK json ctx
+    //         }
 
-    let getVersionChangesAsMarkdown() : WebPart =
-        fun (ctx : HttpContext) ->
-            async {
-                let changes = Changelog.getChangesBetweenVersions versionParameters
-                let html = HumanReadable.changelogToHtml changes
-                return! OK html ctx
-            }
+    // let getVersionChangesAsMarkdown() : WebPart =
+    //     fun (ctx : HttpContext) ->
+    //         async {
+    //             let changes = Changelog.getChangesBetweenVersions versionParameters
+    //             let html = HumanReadable.changelogToHtml changes
+    //             return! OK html ctx
+    //         }
 
 [<EntryPoint>]
     let main argv =
     let app = 
         choose [ 
             GET >=> path "/api" >=> getEnvironmentChanges() >=> setMimeType "application/json; charset=utf-8"
-            GET >=> path "/api/version" >=> getVersionChanges() >=> setMimeType "application/json; charset=utf-8"
+            //GET >=> path "/api/version" >=> getVersionChanges() >=> setMimeType "application/json; charset=utf-8"
             GET >=> path "/" >=> getEnvironmentChangesAsMarkdown()
-            GET >=> path "/version" >=> getVersionChangesAsMarkdown()
+            //GET >=> path "/version" >=> getVersionChangesAsMarkdown()
             GET >=> Files.browseHome
             RequestErrors.NOT_FOUND "Page not found." 
         ]

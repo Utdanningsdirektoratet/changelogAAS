@@ -17,7 +17,7 @@ let getChangeDiff buildConfigurationId newVersion oldVersion baseUrl username pa
     let mainOldVersion = onlyMainVersions oldVersion
 
     let sendBasicAuthRequest url = 
-        Http.RequestString(url, headers = [ BasicAuth username password; Accept HttpContentTypes.Json ])
+        Http.RequestString(url, headers = [ BasicAuth username password; Accept HttpContentTypes.Json; ContentType "application/json;charset=utf-8" ])
 
     let buildsRequestUrl = 
         sprintf "%s/httpAuth/app/rest/builds?id=%s&locator=buildType:%s,sinceBuild:%s&fields=$long,build(id,number,status,changes($long,change(id,comment)))" 
@@ -32,8 +32,9 @@ let getChangeDiff buildConfigurationId newVersion oldVersion baseUrl username pa
           Comments = (b.Changes.Change |> Seq.map (fun c -> c.Comment))}
 
     let noDots (s : string) = s.Replace(".","")
-
-    TeamCityBuilds.Parse (sendBasicAuthRequest buildsRequestUrl)
+    let content = sendBasicAuthRequest buildsRequestUrl
+    printfn "TeamCity: %s" content
+    TeamCityBuilds.Parse content
     |> fun builds -> builds.Build
     |> Seq.map mapBuild
     |> Seq.filter (fun b -> 
