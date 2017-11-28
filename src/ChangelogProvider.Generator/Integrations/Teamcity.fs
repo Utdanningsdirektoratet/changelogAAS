@@ -1,5 +1,6 @@
 module Teamcity
 
+open System
 open TeamcitySamples
 open FSharp.Data
 open FSharp.Data.HttpRequestHeaders
@@ -16,15 +17,17 @@ let getChangeDiff buildConfigurationId newVersion oldVersion baseUrl username pa
     let mainNewVersion = onlyMainVersions newVersion
     let mainOldVersion = onlyMainVersions oldVersion
 
-    let sendBasicAuthRequest url = 
-        Http.RequestString(url, headers = [ BasicAuth username password; Accept HttpContentTypes.Json; ContentType "application/json;charset=utf-8" ])
+    let sendBasicAuthRequest (url: Uri) = 
+        Http.RequestString(url.ToString(), headers = [ BasicAuth username password; Accept HttpContentTypes.Json; ContentType "application/json;charset=utf-8" ])
 
-    let buildsRequestUrl = 
-        sprintf "%s/httpAuth/app/rest/builds?id=%s&locator=buildType:%s,sinceBuild:%s&fields=$long,build(id,number,status,changes($long,change(id,comment)))" 
-            baseUrl
+    let relativUrl = 
+        sprintf "httpAuth/app/rest/builds?id=%s&locator=buildType:%s,sinceBuild:%s&fields=$long,build(id,number,status,changes($long,change(id,comment)))" 
             mainNewVersion 
             buildConfigurationId 
             mainOldVersion
+
+            
+    let buildsRequestUrl =  Uri (baseUrl, relativUrl)
     
     let mapBuild (b : TeamCityBuilds.Build) =
         { Number = b.Number
@@ -32,8 +35,9 @@ let getChangeDiff buildConfigurationId newVersion oldVersion baseUrl username pa
           Comments = (b.Changes.Change |> Seq.map (fun c -> c.Comment))}
 
     let noDots (s : string) = s.Replace(".","")
+
+
     let content = sendBasicAuthRequest buildsRequestUrl
-    printfn "TeamCity: %s" content
     TeamCityBuilds.Parse content
     |> fun builds -> builds.Build
     |> Seq.map mapBuild
