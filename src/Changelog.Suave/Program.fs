@@ -18,17 +18,17 @@ open HumanReadable
         projectName = "UDIR.PAS2"
         fromEnvironmentName = "PAS2-QA"
         toEnvironmentName = "PAS2-PROD"
-        octoUrl = "https://oslaz-pas2-od.udir.no"
+        octoUrl = Uri "https://oslaz-pas2-od.udir.no"
         octoApiKey = System.Environment.GetEnvironmentVariable("OCTO_API_KEY")
-        teamcityUrl = "https://oslaz-pas2-int.udir.no"
+        teamcityUrl = Uri "https://oslaz-pas2-int.udir.no"
         tcUsername = System.Environment.GetEnvironmentVariable("TEAMCITY_USERNAME")
         tcPassword = System.Environment.GetEnvironmentVariable("TEAMCITY_PASSWORD")
-        jiraUrl = "https://jira.udir.no/"
+        jiraUrl = Uri "https://jira.udir.no"
         jiraUsername = System.Environment.GetEnvironmentVariable("JIRA_USERNAME")
         jiraPassword = System.Environment.GetEnvironmentVariable("JIRA_PASSWORD")
         projectMappings = [
             {
-                githubUrl = "https://github.com/Utdanningsdirektoratet/PAS2-hoved"
+                githubUrl = Uri "https://github.com/Utdanningsdirektoratet/PAS2-hoved/"
                 jiraKey = "PASX"
                 octoDeployName = "UDIR.PAS2"
                 teamcityName = "Pas2_ReleasePas2HovedPsake"
