@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <Description>Changelog generator that uses the APIs in your deployment pipeline</Description>
     <VersionPrefix>1.0.0-beta6</VersionPrefix>
@@ -38,7 +38,7 @@
     <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
   </PropertyGroup>
   <PropertyGroup Condition="'$(IsWindows)' == 'true'">
-    <FscToolPath>$(HOMEDRIVE)$(HOMEPATH)/.nuget/packages/FSharp.Compiler.Tools/4.0.1.21/tools/</FscToolPath>
+    <FscToolPath>$(UserProfile)/.nuget/packages/FSharp.Compiler.Tools/4.0.1.21/tools/</FscToolPath>
     <FscToolExe>fsc.exe</FscToolExe>
   </PropertyGroup>
   <PropertyGroup Condition="'$(IsOSX)' == 'true'">
