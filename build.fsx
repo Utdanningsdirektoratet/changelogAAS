@@ -49,7 +49,7 @@ Target.create "Publish" (fun _ ->
           PublishUrl = udirNugetFeed
           WorkingDir = artifactsDir
           OutputPath = artifactsDir
-          Project = "PAS2.ChangelogAAS.Provider"
+          Project = "UDIR.PAS2.ChangelogAAS.Provider"
           Version = version })
   
 )
