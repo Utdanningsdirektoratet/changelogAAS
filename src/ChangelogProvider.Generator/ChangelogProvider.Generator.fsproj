@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <Description>Changelog generator that uses the APIs in your deployment pipeline</Description>
-    <VersionPrefix>1.0.0-beta6</VersionPrefix>
-    <PackageVersion>1.0.0-beta6</PackageVersion>
+    <VersionPrefix>1.0.0-local</VersionPrefix>
+    <PackageVersion>1.0.0-local</PackageVersion>
     <TargetFrameworks>net45</TargetFrameworks>
     <AssemblyName>ChangelogProvider</AssemblyName>
-    <PackageId>ChangelogAAS.Provider</PackageId>
+    <PackageId>PAS2.ChangelogAAS.Provider</PackageId>
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <PropertyGroup>
@@ -25,11 +25,15 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
-    <PackageReference Include="FSharp.Data" Version="2.4.0" />
+    <PackageReference Include="FSharp.Data" Version="3.0.0" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
-    <PackageReference Include="FSharp.Compiler.Tools" Version="4.0.1.21">
+    <PackageReference Include="FSharp.Compiler.Tools" Version="10.2.1">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.0" />
+    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <!-- Type Provider workaround https://github.com/Microsoft/visualfsharp/issues/3303 -->
   <PropertyGroup>
@@ -38,7 +42,7 @@
     <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
   </PropertyGroup>
   <PropertyGroup Condition="'$(IsWindows)' == 'true'">
-    <FscToolPath>$(UserProfile)/.nuget/packages/FSharp.Compiler.Tools/4.0.1.21/tools/</FscToolPath>
+    <FscToolPath>$(UserProfile)/.nuget/packages/FSharp.Compiler.Tools/10.2.1/tools/</FscToolPath>
     <FscToolExe>fsc.exe</FscToolExe>
   </PropertyGroup>
   <PropertyGroup Condition="'$(IsOSX)' == 'true'">
